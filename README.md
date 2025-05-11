@@ -12,6 +12,21 @@ Despite that, I spent several focused days learning and building, not just writi
 
 ---
 
+## 🤖 Disclaimer on AI Tools Usage
+
+I value transparency and learning, so I focused on learning and thinking independently throughout this challenge. However, I used some AI tools in the following ways only:
+
+* Study roadmap planning
+* Installing Docker/Minikube on Windows
+* Markdown formatting help
+* Python helper functions
+* Fixing errors in Python & Go
+* Translating Python to Go
+
+> 📌 This README and all explanations were fully written by me. AI was used only for formatting help.
+
+---
+
 ## 📦 Repository Overview
 
 This repository includes:
@@ -36,7 +51,6 @@ This repository includes:
 - Logging
 - Handling Large Inputs
 - Concerns and Future Work
-- AI Tools Usage
 - References
 
 ---
@@ -304,20 +318,6 @@ I implemented multithreading in the Python script to handle multiple secrets.
 * [ ] Add `--dry-run`, `--namespace`, `--filter` flags.
 * [ ] Write shell scripts to automate testing and validation.
 * [ ] Use go routines to handle large number of secrets
-
----
-
-## 🤖 AI Tools Usage
-
-I value transparency and learning, here's exactly how I used AI:
-* Roadmap planning
-* Installing Docker/Minikube on Windows
-* Markdown formatting help
-* Python helper functions
-* Fixing errors in Python & Go
-* Translating Python to Go
-
-> 📌 This README was 100% written by me, only formatting help came from AI.
 
 ---
 
