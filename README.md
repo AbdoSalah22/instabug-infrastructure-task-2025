@@ -12,22 +12,32 @@ Despite that, I spent several focused days learning and building, not just writi
 
 ---
 
+## 📦 Repository Overview
+
+This repository includes:
+
+- **Comprehensive Documentation:** Step-by-step explanation of my approach, design decisions, and technical challenges.
+- **Python Script Proof-of-Concept:** A script that automates the process of re-encrypting all SealedSecrets in a Kubernetes cluster.
+- **Source Code Modifications:** Changes to the official `kubeseal` CLI (located in `cmd/kubeseal`) to add a new `--reencrypt-all` flag, enabling cluster-wide SealedSecret re-encryption directly from the CLI.
+
+---
+
 ## 📚 Table of Contents
 
-- [Problem Statement](#problem-statement)
-- [Requirements](#requirements)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [First Attempt](#first-attempt)
-- [Second Attempt](#second-attempt)
-- [Modifying the Source Code](#modifying-the-source-code)
-- [Testing](#testing)
-- [Security](#security)
-- [Logging](#logging)
-- [Handling Large Inputs](#handling-large-inputs)
-- [Concerns and Future Work](#concerns-and-future-work)
-- [AI Tools Usage](#ai-tools-usage)
-- [References](#references)
+- Problem Statement
+- Requirements
+- Prerequisites
+- Installation
+- First Attempt
+- Second Attempt
+- Modifying the Source Code
+- Testing
+- Security
+- Logging
+- Handling Large Inputs
+- Concerns and Future Work
+- AI Tools Usage
+- References
 
 ---
 
@@ -54,6 +64,7 @@ Despite that, I spent several focused days learning and building, not just writi
 ## ⚙️ Prerequisites
 
 - Docker Desktop
+- kubectl CLI
 - Minikube
 - Sealed-Secrets controller installed in cluster
 - Go programming language installed
@@ -62,18 +73,69 @@ Despite that, I spent several focused days learning and building, not just writi
 
 ## 🧪 Installation
 
-1. Install Docker and Minikube for your machine.
-2. Set up a local cluster and install the sealed-secrets controller.
-3. Clone the [sealed-secrets GitHub repo](https://github.com/bitnami-labs/sealed-secrets).
-4. Build a custom `kubeseal` executable:
-   ```bash
-   cd cmd/kubeseal
-   go build -o mykubeseal.exe
-   ```
+### 1. Install Prerequisites
+
+- **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**  
+  Download and install Docker Desktop for your OS.
+
+- **[Minikube](https://minikube.sigs.k8s.io/docs/start/)**  
+  Follow the [official guide](https://minikube.sigs.k8s.io/docs/start/) to install Minikube.
+
+- **[kubectl](https://kubernetes.io/docs/tasks/tools/)**  
+  Install the Kubernetes CLI if you don't have it already.
+
+- **Go Programming Language**  
+  Download from [golang.org](https://go.dev/dl/).
+
+---
+
+### 2. Start a Local Kubernetes Cluster
+
+```bash
+minikube start --driver=docker
+```
+
+---
+
+### 3. Install the Sealed-Secrets Controller
+
+```bash
+kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.29.0/controller.yaml
+```
+
+Wait for the controller pod to be ready:
+```bash
+kubectl -n kube-system get pods -A
+```
+> You should see a pod named sealed-secrets-controller-abc123 (any random number)
+---
+
+### 4. Clone and Build the Custom `kubeseal` CLI
+
+```bash
+git clone https://github.com/bitnami-labs/sealed-secrets.git
+cd sealed-secrets/cmd/kubeseal
+go build -o mykubeseal.exe
+```
+
+---
+
+### 5. Verify Installation
+
+Check that your custom CLI works:
+```bash
+.\mykubeseal.exe --help
+```
+
+---
+
+We now have a local Kubernetes cluster with Sealed-Secrets and a custom `kubeseal` CLI ready for use.
 
 ---
 
 ## 🚀 First Attempt
+
+After learning more about kubeseal from tutorials and reading its documentation, I found the required commands to do the main requirements.
 
 ### Steps:
 
@@ -106,7 +168,7 @@ I had a look at the Sealed-Secrets documentation and found a great flag that can
 
 ## 🔐 Second Attempt
 
-I discovered the official `--re-encrypt` flag from Bitnami, which allows:
+I discovered the official `--re-encrypt` flag from Sealed-Secrets documentation, which allows:
 
 * Decrypting a SealedSecret using the controller's private key without exposing it.
 * Re-encrypting it using the latest public key.
@@ -220,7 +282,7 @@ I made the Python script log each step if it passes or fails. For each run, a se
 
 ## ⚡ Handling Large Inputs
 
-I am currently studying High Performance Computing, so I thought it might be a good idea to use multithreading to solve this problem. We can distribute the load to a fixed amount of threads or we can configure it dynamically based on the number of sealedsecrets
+I am currently studying High Performance Computing, so I thought it might be a good idea to use multithreading to solve this problem. We can distribute the load to a fixed amount of threads or we can configure it dynamically based on the number of SealedSecrets.
 I implemented multithreading in the Python script to handle multiple secrets.
   ```python
     with ThreadPoolExecutor(max_workers=5) as executor:
